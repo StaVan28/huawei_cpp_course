@@ -1,0 +1,18 @@
+
+******************************************************
+       Stack:
+
+Stack (OK) [0x1ffefffc70] "stck3" {
+
+Current size = 1
+Capacity     = 5
+
+Data [0x4dcd0c0]
+*{ 1} : 5
+ { 2} : nan (POISON)
+ { 3} : nan (POISON)
+ { 4} : nan (POISON)
+ { 5} : nan (POISON)
+}
+
+******************************************************

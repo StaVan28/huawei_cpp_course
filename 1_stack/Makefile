@@ -37,7 +37,7 @@ vpath %.cpp $(SRC_DIR)
 vpath %.hpp $(HDR_DIR)
 
 # compiler settings
-CXX      = g++ -std=c++20
+CXX      = g++ -std=c++11
 WARNINGS = -Wall -Wextra -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy \
            -Wenum-compare -Wfloat-equal -Wnon-virtual-dtor -Wold-style-cast \
            -Woverloaded-virtual -Wredundant-decls -Wsign-conversion -Wsign-promo

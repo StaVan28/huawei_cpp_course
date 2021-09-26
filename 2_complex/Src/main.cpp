@@ -3,7 +3,10 @@
 
 int main() 
 {
-    Complex::Complex(1, 2);
+    Complex::Complex my_complex(1, 2);
+
+    std::ofstream out;
+    out << my_complex;
 
     return 0;
 }

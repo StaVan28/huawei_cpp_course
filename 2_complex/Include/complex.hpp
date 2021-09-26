@@ -10,6 +10,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <string.h>
+#include <fstream>
 
 //!
 
@@ -28,11 +29,11 @@ private:
     double real_ = POISON;
     double imag_ = POISON;
 
-//------------------------
+//--------------------------------------------------
 
 public:
 
-//--------------------------------------------------
+//------------------------
 
 Complex() = delete;
 
@@ -52,6 +53,48 @@ Complex(double real, double imag) :
 }
 
 //------------------------
+
+double get_real() const
+{
+    return real_;
+}
+
+//------------------------
+
+double get_imag() const
+{
+    return imag_;
+}
+
+//------------------------
+
+void set_real(double real)
+{
+    real_ = real;
+}
+
+//------------------------
+
+void set_imag(double imag)
+{
+    imag_ = imag;
+}
+
+
+//------------------------
+
+friend std::ostream& operator << (std::ostream& out, const Complex& clx)
+{
+    out << "(" << clx.real_ << ";" << clx.imag_ << ")" << std::endl;
+    return out;
+}
+
+//------------------------
+
+void print() const
+{
+    printf("(%lg;%lg)\n", real_, imag_);
+}
 
 }; // Complex class
 

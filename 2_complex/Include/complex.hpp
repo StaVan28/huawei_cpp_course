@@ -11,6 +11,10 @@
 #include <errno.h>
 #include <string.h>
 
+//!
+
+#include "consts.hpp"
+
 //-----------------------------------------------------------------------------
 
 namespace Complex
@@ -18,10 +22,37 @@ namespace Complex
 
 class Complex 
 {
+
 private:
 
+    double real_ = POISON;
+    double imag_ = POISON;
+
+//------------------------
+
 public:
-    
+
+//--------------------------------------------------
+
+Complex() = delete;
+
+//------------------------
+
+Complex(double real, double imag) :
+    real_{real},
+    imag_{imag}
+{}
+
+//------------------------
+
+~Complex()
+{
+    real_ = POISON;
+    imag_ = POISON;
+}
+
+//------------------------
+
 }; // Complex class
 
 }  // Complex namespace

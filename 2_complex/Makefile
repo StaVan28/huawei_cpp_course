@@ -25,7 +25,7 @@ TXT_DIR = Txt
 
 # source
 BIN  = $(BIN_DIR)/complex
-HDR  = $(HDR_DIR)/complex.hpp
+HDR  = $(HDR_DIR)/complex.hpp $(HDR_DIR)/consts.hpp
 SRC  = $(SRC_DIR)/main.cpp  
 OBJ  = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC)))
 OBJ := $(OBJ:%.cpp=%.o)
@@ -86,8 +86,7 @@ $(OBJ_DIR)/%.o: %.cpp
 	$(E) "    C++:         " $@
 	$(Q) ${CXX} -c ${CXXFLAGS} $(addprefix -I,$(HDR_DIR)) $< -o $@
 
-$(OBJ_DIR)/main.o:    main.cpp complex.hpp
-
+$(OBJ_DIR)/main.o: main.cpp complex.hpp consts.hpp
 
 #
 ## additional features

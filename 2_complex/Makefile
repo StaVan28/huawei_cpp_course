@@ -3,45 +3,39 @@
 #--------------------------------------------------------------------------------------
 
 # Makefile for complex_project
-# version 1.0
+# version 1.1
 #		author: Starchenko Ivan
 
 #--------------------------------------------------------------------------------------
 # SETTINGS
 #--------------------------------------------------------------------------------------
 
+# project name
+export PROJECT = complex
+
 # choose release or debug mode
 LAUNCH_MODE = debug
 
-Q = @  
-E = $(Q) echo
+export Q = @  
+export E = $(Q) echo
 
 # path for directories
-BIN_DIR = Bin
-SRC_DIR = Src
-HDR_DIR = Include
-OBJ_DIR = Obj
-TXT_DIR = Txt
+export BIN_DIR = Bin
+export SRC_DIR = Src
+export HDR_DIR = Include
+export OBJ_DIR = Obj
+export TST_DIR = Tests
 
-# source
-BIN  = $(BIN_DIR)/complex
-HDR  = $(HDR_DIR)/complex.hpp $(HDR_DIR)/consts.hpp $(HDR_DIR)/double.hpp
-SRC  = $(SRC_DIR)/main.cpp $(SRC_DIR)/complex.cpp $(SRC_DIR)/double.cpp
-OBJ  = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC)))
-OBJ := $(OBJ:%.cpp=%.o)
-DEP  = $(OBJ:%.o=%.d)
-LIB  = libcomplex.a
-
-# find a *.hpp files 
-vpath %.cpp $(SRC_DIR)
-vpath %.hpp $(HDR_DIR)
+# Files
+BIN       = $(BIN_DIR)/$(PROJECT)
+BIN_TESTS = $(BIN_DIR)/$(PROJECT)_tests
 
 # compiler settings
-CXX      = g++ -std=c++11
-WARNINGS = -Wall -Wextra -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy \
-           -Wenum-compare -Wfloat-equal -Wnon-virtual-dtor -Wold-style-cast \
-           -Woverloaded-virtual -Wredundant-decls -Wsign-conversion -Wsign-promo
-CXXFLAGS = 
+export CXX      = g++ -std=c++14
+export CXXFLAGS = -MMD
+       WARNINGS = -Wall -Wextra -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy \
+                  -Wenum-compare -Wfloat-equal -Wnon-virtual-dtor -Wold-style-cast \
+                  -Woverloaded-virtual -Wredundant-decls -Wsign-conversion -Wsign-promo
 
 DEBUG_MODE   = -g3 -O0
 RELEASE_MODE = -g0 -O2
@@ -62,33 +56,25 @@ endif
 
 #
 ## launch with debug valgrind(default)
-default: print_logs
+default: $(LAUNCH_MODE)
 
-print_logs: $(LAUNCH_MODE)
-
-debug: $(BIN) 
+debug: $(PROJECT) 
 	$(E) "    LAUNCH(DBG): " $(BIN)
 	$(Q) valgrind $(BIN)
 
-release: clean  $(BIN)
+release: clean $(PROJECT)
 	$(E) "    LAUNCH(RLS): " $(BIN)
 	$(Q) $(BIN)
 
-#
-## linking
-$(BIN): $(OBJ)
-	$(E) "    LINK:        " $@
-	$(Q) $(CXX) $(WARNINGS) $^ -o $@ 
+$(PROJECT):
+	$(E) "    MAKE RECUR(compile):" $(BIN)
+	$(Q) $(MAKE) -C $(SRC_DIR)
 
-#
-## compiling
-$(OBJ_DIR)/%.o: %.cpp
-	$(E) "    C++:         " $@
-	$(Q) ${CXX} -c  ${CXXFLAGS} $(addprefix -I,$(HDR_DIR)) $< -o $@
-
-$(OBJ_DIR)/main.o:       main.cpp complex.hpp
-$(OBJ_DIR)/complex.o: complex.cpp complex.hpp consts.hpp double.hpp
-$(OBJ_DIR)/double.o:   double.cpp  double.hpp
+tests:
+	$(E) "    MAKE RECUR(compile): " $(BIN_TESTS)
+	$(Q) $(MAKE) -C $(TST_DIR)
+	$(E) "    LAUNCH:              " $(BIN_TESTS)
+	$(Q) $(BIN_TESTS)
 
 #
 ## additional features
@@ -96,11 +82,11 @@ $(OBJ_DIR)/double.o:   double.cpp  double.hpp
 
 install:
 	$(E) " INSTALL"
-	$(Q) mkdir -p $(OBJ_DIR) $(BIN_DIR) $(TXT_DIR)
+	$(Q) mkdir -p $(OBJ_DIR) $(BIN_DIR)
 
 clean:
 	$(E) "  CLEAN"
-	$(Q) rm -f $(BIN) tags $(OBJ)
+	$(Q) rm -f $(BIN) $(BIN_TESTS) $(OBJ_DIR)/*.o $(OBJ_DIR)/*.d
 
 tags: ${SRC}
 	$(Q) rm -f tags
@@ -130,5 +116,3 @@ print_logs:
 ## generate static lib 
 $(PROJ_LIB): $(OBJ)
 	$(Q) ar cr $@ $^
-
--include $(DEP)

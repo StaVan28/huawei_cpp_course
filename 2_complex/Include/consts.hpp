@@ -6,7 +6,15 @@
 
 namespace
 {
-	double POISON = NAN;
+	const double POISON = NAN;
+
+	//!
+
+	enum COMPLEX_ERRORS
+	{
+		ISNAN_ERROR    = 1,
+		ZERO_DIV_ERROR = 2,
+	};
 
 } // Anonymus namespace
 

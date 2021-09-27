@@ -3,10 +3,12 @@
 
 int main() 
 {
-    Complex::Complex my_complex(1, 2);
+    Clx::Complex my_complex1(1, 2);
+    Clx::Complex my_complex2(NAN, 4);
 
-    std::ofstream out;
-    out << my_complex;
+    Clx::Complex my_complex = my_complex1 - my_complex2;
+
+    my_complex.print();
 
     return 0;
 }

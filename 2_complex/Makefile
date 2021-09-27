@@ -25,8 +25,8 @@ TXT_DIR = Txt
 
 # source
 BIN  = $(BIN_DIR)/complex
-HDR  = $(HDR_DIR)/complex.hpp $(HDR_DIR)/consts.hpp
-SRC  = $(SRC_DIR)/main.cpp  
+HDR  = $(HDR_DIR)/complex.hpp $(HDR_DIR)/consts.hpp $(HDR_DIR)/double.hpp
+SRC  = $(SRC_DIR)/main.cpp $(SRC_DIR)/complex.cpp $(SRC_DIR)/double.cpp
 OBJ  = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC)))
 OBJ := $(OBJ:%.cpp=%.o)
 DEP  = $(OBJ:%.o=%.d)
@@ -44,7 +44,7 @@ WARNINGS = -Wall -Wextra -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-priva
 CXXFLAGS = 
 
 DEBUG_MODE   = -g3 -O0
-RELEASE_MODE = -g0 -Ofast
+RELEASE_MODE = -g0 -O2
 
 VALGRIND_FLAGS = --leak-check=full --show-leak-kinds=all -v
 
@@ -67,30 +67,28 @@ default: print_logs
 print_logs: $(LAUNCH_MODE)
 
 debug: $(BIN) 
-	$(E) "  LAUNCH(DBG):" $(BIN)
+	$(E) "    LAUNCH(DBG): " $(BIN)
 	$(Q) valgrind $(BIN)
 
 release: clean  $(BIN)
-	$(E) "  LAUNCH(RLS):" $(BIN)
+	$(E) "    LAUNCH(RLS): " $(BIN)
 	$(Q) $(BIN)
 
 #
 ## linking
 $(BIN): $(OBJ)
 	$(E) "    LINK:        " $@
-	$(Q) $(CXX) $(WARNINGS) $^ -o $@  
+	$(Q) $(CXX) $(WARNINGS) $^ -o $@ 
 
 #
 ## compiling
 $(OBJ_DIR)/%.o: %.cpp
 	$(E) "    C++:         " $@
-	$(Q) ${CXX} -c ${CXXFLAGS} $(addprefix -I,$(HDR_DIR)) $< -o $@
+	$(Q) ${CXX} -c  ${CXXFLAGS} $(addprefix -I,$(HDR_DIR)) $< -o $@
 
-$(OBJ_DIR)/main.o: main.cpp complex.hpp consts.hpp
-
-#
-## additional features
-.PHONY: clean errors tags rebuild git no_valgrind unit_tests library log full_check_valgrind print_logs
+$(OBJ_DIR)/main.o:       main.cpp complex.hpp
+$(OBJ_DIR)/complex.o: complex.cpp complex.hpp consts.hpp double.hpp
+$(OBJ_DIR)/double.o:   double.cpp  double.hpp
 
 #
 ## additional features
@@ -102,7 +100,7 @@ install:
 
 clean:
 	$(E) "  CLEAN"
-	$(Q) rm -f $(BIN) tags $(OBJ_DIR)/*.o
+	$(Q) rm -f $(BIN) tags $(OBJ)
 
 tags: ${SRC}
 	$(Q) rm -f tags

@@ -4,21 +4,17 @@
 
 //-----------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <assert.h>
-#include <errno.h>
-#include <string.h>
-#include <fstream>
+#include <iostream>
+#include <cmath>
 
 //!
 
 #include "consts.hpp"
+#include "double.hpp"
 
 //-----------------------------------------------------------------------------
 
-namespace Complex
+namespace Clx
 {
 
 class Complex 
@@ -26,75 +22,63 @@ class Complex
 
 private:
 
-    double real_ = POISON;
-    double imag_ = POISON;
+    double real_;
+    double imag_;
 
 //--------------------------------------------------
 
 public:
 
-//------------------------
+    // constructs
+    Complex();
+    Complex(double real, double imag);
 
-Complex() = delete;
+    // rule of 3
+   ~Complex();
+    Complex(const Complex& clx);
+    Complex& operator = (const Complex& clx);  
 
-//------------------------
+    // getters
+    double get_real() const;
+    double get_imag() const;
 
-Complex(double real, double imag) :
-    real_{real},
-    imag_{imag}
-{}
+    // setters
+    bool set_real(double real);
+    bool set_imag(double imag);
 
-//------------------------
+    // operations with complex number
+    Complex operator + (const Complex& clx) const;
+    Complex operator - (const Complex& clx) const;
+    Complex operator * (const Complex& clx) const;
+    Complex operator / (const Complex& clx) const;
 
-~Complex()
-{
-    real_ = POISON;
-    imag_ = POISON;
-}
+    Complex& operator += (const Complex& clx);
+    Complex& operator -= (const Complex& clx);
+    Complex& operator *= (const Complex& clx);
+    Complex& operator /= (const Complex& clx);
 
-//------------------------
+    // operations with double
+    Complex operator + (double num) const;
+    Complex operator - (double num) const;
+    Complex operator * (double num) const;
+    Complex operator / (double num) const;
 
-double get_real() const
-{
-    return real_;
-}
+    Complex& operator += (double num);
+    Complex& operator -= (double num);
+    Complex& operator *= (double num);
+    Complex& operator /= (double num);
 
-//------------------------
+    // unary operations
+    Complex operator + ();
+    Complex operator - ();
 
-double get_imag() const
-{
-    return imag_;
-}
+    // comparison
+    bool operator == (const Complex& clx) const;
+    bool operator != (const Complex& clx) const;
 
-//------------------------
-
-void set_real(double real)
-{
-    real_ = real;
-}
-
-//------------------------
-
-void set_imag(double imag)
-{
-    imag_ = imag;
-}
-
-
-//------------------------
-
-friend std::ostream& operator << (std::ostream& out, const Complex& clx)
-{
-    out << "(" << clx.real_ << ";" << clx.imag_ << ")" << std::endl;
-    return out;
-}
-
-//------------------------
-
-void print() const
-{
-    printf("(%lg;%lg)\n", real_, imag_);
-}
+    // other funcs
+    double modul() const;
+    void   print() const;
 
 }; // Complex class
 

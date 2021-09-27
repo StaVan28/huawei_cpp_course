@@ -22,6 +22,10 @@ Compilation and launch
 
     make 
 
+Launch tests
+
+    make tests
+
 ## Example of use 
 
 ```C++

@@ -148,8 +148,8 @@ Clx::Complex Clx::Complex::operator / (const Complex& clx) const
 
 	Clx::Complex tmp_complex;
 
-	tmp_complex.real_ = (real_ * clx.real_ - imag_ * clx.imag_) / modul;
-	tmp_complex.imag_ = (real_ * clx.imag_ + imag_ * clx.real_) / modul;	
+	tmp_complex.real_ = (real_ * clx.real_ + imag_ * clx.imag_) / modul;
+	tmp_complex.imag_ = (imag_ * clx.real_ - real_ * clx.imag_) / modul;	
 
 	return tmp_complex;	
 }
@@ -185,8 +185,10 @@ Clx::Complex& Clx::Complex::operator -= (const Clx::Complex& clx)
 
 Clx::Complex& Clx::Complex::operator *= (const Clx::Complex& clx)
 {
-	real_ = real_ * clx.real_ - imag_ * clx.imag_;
-	imag_ = real_ * clx.imag_ + imag_ * clx.real_;	
+	Complex tmp_clx(*this);
+
+	real_ = tmp_clx.real_ * clx.real_ - tmp_clx.imag_ * clx.imag_;
+	imag_ = tmp_clx.real_ * clx.imag_ + tmp_clx.imag_ * clx.real_;
 
 	return *this;
 }
@@ -202,8 +204,10 @@ Clx::Complex& Clx::Complex::operator /= (const Clx::Complex& clx)
 		return *this;
 	}
 
-	real_ = (real_ * clx.real_ - imag_ * clx.imag_) / modul;
-	imag_ = (real_ * clx.imag_ + imag_ * clx.real_) / modul;	
+	Complex tmp_clx(*this);
+
+	real_ = (tmp_clx.real_ * clx.real_ + tmp_clx.imag_ * clx.imag_) / modul;
+	imag_ = (tmp_clx.imag_ * clx.real_ - tmp_clx.real_ * clx.imag_) / modul;
 
 	return *this;	
 }
@@ -284,7 +288,8 @@ Clx::Complex& Clx::Complex::operator -= (double num)
 
 Clx::Complex& Clx::Complex::operator *= (double num)
 {
-	real_ = real_ * num;	
+	real_ = real_ * num;
+	imag_ = imag_ * num;	
 
 	return *this;		
 }
@@ -299,7 +304,8 @@ Clx::Complex& Clx::Complex::operator /= (double num)
 		return *this;
 	}
 
-	real_ = real_ / num;	
+	real_ = real_ / num;
+	imag_ = imag_ / num;	
 
 	return *this;
 }

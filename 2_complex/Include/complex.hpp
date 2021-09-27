@@ -17,17 +17,10 @@
 namespace Clx
 {
 
-class Complex 
+struct Complex 
 {
-
-private:
-
     double real_;
     double imag_;
-
-//--------------------------------------------------
-
-public:
 
     // constructs
     Complex();

@@ -33,7 +33,7 @@ Compilation and launch
         Clx::Complex gthb_example(1.5, 2);
         // or
         // With default (0; 0)
-        Clx::Complex gthb_example_default();
+        Clx::Complex gthb_example_default;
 
         // Also implemented set_{real, imag}() funcs:
         gthb_example_default.set_real(7);
@@ -46,7 +46,7 @@ Compilation and launch
         double dbl_exemple_2 = 0.5;
 
         //( (1.5, 2) => (4.8, 2) )
-        gthb_example += dbl_example_1; 
+        gthb_example += dbl_exemple_1; 
 
         //( (7, 4.6) => (2.4, 1) )
         gthb_example_default = gthb_example * dbl_exemple_2;

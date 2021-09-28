@@ -29,11 +29,7 @@ struct Complex
     // rule of 3
    ~Complex();
     Complex(const Complex& clx);
-    Complex& operator = (const Complex& clx);  
-
-    // getters
-    double get_real() const;
-    double get_imag() const;
+    Complex& operator = (const Complex& clx); 
 
     // setters
     bool set_real(double real);

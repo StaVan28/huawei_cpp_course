@@ -138,7 +138,7 @@ void Clx::ComplexTests::test_5_get_real()
 
 	Complex test_clx(9909, -5634.2);
 
-	if (!is_different(test_clx.get_real(), 9909))
+	if (!is_different(test_clx.real_, 9909))
 		printf("Success! [V]\n");
 	else
 		printf("ERROR ERROR ERROR! [X]\n");
@@ -154,7 +154,7 @@ void Clx::ComplexTests::test_6_get_imag()
 
 	Complex test_clx(9909, -5634.2);
 
-	if (!is_different(test_clx.get_imag(), -5634.2))
+	if (!is_different(test_clx.imag_, -5634.2))
 		printf("Success! [V]\n");
 	else
 		printf("ERROR ERROR ERROR! [X]\n");

@@ -58,8 +58,8 @@ struct Complex
     Complex& operator /= (double num);
 
     // unary operations
-    Complex operator + ();
-    Complex operator - ();
+    Complex operator + () const;
+    Complex operator - () const;
 
     // comparison
     bool operator == (const Complex& clx) const;

@@ -302,7 +302,7 @@ Clx::Complex Clx::Complex::operator + () const
 
 //------------------------
 
-Clx::Complex Clx::Complex::operator - ()
+Clx::Complex Clx::Complex::operator - () const
 {
     Clx::Complex tmp_complex;
 

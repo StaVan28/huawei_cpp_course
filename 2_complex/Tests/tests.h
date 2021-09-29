@@ -1,13 +1,8 @@
 
-#ifndef TESTS_HPP_INCLUDED
-#define TESTS_HPP_INCLUDED
+#ifndef TESTS_H_INCLUDED
+#define TESTS_H_INCLUDED
 
 //-----------------------------------------------------------------------------
-
-#include "complex.hpp"
-
-namespace Clx
-{
 
 struct ComplexTests
 {
@@ -71,7 +66,6 @@ struct ComplexTests
 	
 }; // ComplexTests struct
 
-}  // Complex namespace
 //-----------------------------------------------------------------------------
 
-#endif // TESTS_HPP_INCLUDED
+#endif // TESTS_H_INCLUDED

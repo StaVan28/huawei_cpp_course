@@ -1,21 +1,15 @@
 
-#ifndef COMPLEX_HPP_INCLUDED
-#define COMPLEX_HPP_INCLUDED
-
-//-----------------------------------------------------------------------------
-
-#include <iostream>
-#include <cmath>
-
-//!
-
-#include "consts.hpp"
-#include "double.hpp"
+#ifndef COMPLEX_H_INCLUDED
+#define COMPLEX_H_INCLUDED
 
 //-----------------------------------------------------------------------------
 
 namespace Clx
 {
+
+const double EPSILON_BORDER = 1e-6;
+
+//!
 
 struct Complex 
 {
@@ -25,10 +19,10 @@ struct Complex
     // constructs
     Complex();
     Complex(double real, double imag);
-
-    // rule of 3
-   ~Complex();
     Complex(const Complex& clx);
+
+   ~Complex();
+   
     Complex& operator = (const Complex& clx); 
 
     // setters
@@ -59,7 +53,7 @@ struct Complex
 
     // unary operations
     Complex operator + () const;
-    Complex operator - () const;
+    Complex operator - () const;    
 
     // comparison
     bool operator == (const Complex& clx) const;
@@ -71,8 +65,10 @@ struct Complex
 
 }; // Complex class
 
+double is_different(double value_1, double value_2);
+
 }  // Complex namespace
 
 //-----------------------------------------------------------------------------
 
-#endif // COMPLEX_HPP_INCLUDED
+#endif // COMPLEX_H_INCLUDED

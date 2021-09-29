@@ -1,5 +1,10 @@
 
-#include "complex.hpp"
+#include <cstdio>
+#include <cmath>
+
+//!
+
+#include "complex.h"
 
 //-----------------------------------
 
@@ -54,7 +59,7 @@ bool Clx::Complex::set_real(double real)
     if (std::isnan(real))
     {
         fprintf(stderr, "ERROR! NAN in real part\n");
-        return ISNAN_ERROR;
+        return 1;
     }
 
     real_ = real;
@@ -68,7 +73,7 @@ bool Clx::Complex::set_imag(double imag)
     if (std::isnan(imag))
     {
         fprintf(stderr, "ERROR! NAN in imag part\n");
-        return ISNAN_ERROR;
+        return 1;
     }
 
     imag_ = imag;
@@ -324,6 +329,16 @@ bool Clx::Complex::operator == (const Clx::Complex& clx) const
 bool Clx::Complex::operator != (const Clx::Complex& clx) const
 {
     return (is_different(real_, clx.real_) || is_different(imag_, clx.imag_));
+}
+
+//------------------------
+
+double Clx::is_different(double value_1, double value_2)
+{
+    if (fabs(value_1 - value_2) > EPSILON_BORDER)
+        return value_1 - value_2;
+    else
+        return 0;
 }
 
 //------------------------

@@ -11,31 +11,42 @@
 #--------------------------------------------------------------------------------------
 
 # project name
-export PROJECT = complex
+PROJECT = complex
 
 # choose release or debug mode
 LAUNCH_MODE = debug
 
-export Q = @  
-export E = $(Q) echo
+Q = @  
+E = $(Q) echo
 
 # path for directories
-export BIN_DIR = Bin
-export SRC_DIR = Src
-export HDR_DIR = Include
-export OBJ_DIR = Obj
-export TST_DIR = Tests
+BIN_DIR = Bin
+SRC_DIR = Src
+HDR_DIR = Include
+OBJ_DIR = Obj
+TST_DIR = Tests
 
-# Files
+# Source
 BIN       = $(BIN_DIR)/$(PROJECT)
 BIN_TESTS = $(BIN_DIR)/$(PROJECT)_tests
 
+HDR  = $(HDR_DIR)/$(PROJECT).h   $(TST_DIR)/tests.h
+SRC  = $(SRC_DIR)/$(PROJECT).cpp $(TST_DIR)/tests.cpp $(SRC_DIR)/main.cpp 
+OBJ  = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC)))
+OBJ := $(OBJ:%.cpp=%.o)
+DEP  = $(OBJ:%.o=%.d)
+LIB  = $(addprefix lib, $(addsuffix .a, $(notdir $(BIN))))
+
+# find a *.cpp *.h files 
+vpath %.cpp $(SRC_DIR) $(TST_DIR)
+vpath %.h   $(HDR_DIR) $(TST_DIR) 
+
 # compiler settings
-export CXX      = g++ -std=c++14
-export CXXFLAGS = -MMD
-       WARNINGS = -Wall -Wextra -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy \
-                  -Wenum-compare -Wfloat-equal -Wnon-virtual-dtor -Wold-style-cast \
-                  -Woverloaded-virtual -Wredundant-decls -Wsign-conversion -Wsign-promo
+CXX      = g++ -std=c++14
+CXXFLAGS = -MMD
+WARNINGS = -Wall -Wextra -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy \
+           -Wenum-compare -Wfloat-equal -Wnon-virtual-dtor -Wold-style-cast \
+           -Woverloaded-virtual -Wredundant-decls -Wsign-conversion -Wsign-promo
 
 DEBUG_MODE   = -g3 -O0
 RELEASE_MODE = -g0 -O2
@@ -58,23 +69,33 @@ endif
 ## launch with debug valgrind(default)
 default: $(LAUNCH_MODE)
 
-debug: $(PROJECT) 
+debug: $(BIN) 
 	$(E) "    LAUNCH(DBG): " $(BIN)
 	$(Q) valgrind $(BIN)
 
-release: clean $(PROJECT)
+release: clean $(BIN)
 	$(E) "    LAUNCH(RLS): " $(BIN)
 	$(Q) $(BIN)
 
-$(PROJECT):
-	$(E) "    MAKE RECUR(compile):" $(BIN)
-	$(Q) $(MAKE) -C $(SRC_DIR)
-
-tests:
-	$(E) "    MAKE RECUR(compile): " $(BIN_TESTS)
-	$(Q) $(MAKE) -C $(TST_DIR)
-	$(E) "    LAUNCH:              " $(BIN_TESTS)
+tests: $(BIN_TESTS)
+	$(E) "    LAUNCH(TESTS):       " $(BIN_TESTS)
 	$(Q) $(BIN_TESTS)
+
+#
+## linking
+$(BIN): $(OBJ)
+	$(E) "    LINK:        " $@
+	$(Q) $(CXX) $(WARNINGS) $^ -o $@ 
+
+#
+## compiling
+$(OBJ_DIR)/%.o: %.cpp
+	$(E) "    C++:         " $@
+	$(Q) ${CXX} -c  ${CXXFLAGS} $(addprefix -I, $(HDR_DIR)) $< -o $@
+
+$(OBJ_DIR)/main.o:             main.cpp $(PROJECT).h tests.h
+$(OBJ_DIR)/$(PROJECT).o: $(PROJECT).cpp $(PROJECT).h 
+$(OBJ_DIR)/tests.o:           tests.cpp $(PROJECT).h tests.h
 
 #
 ## additional features

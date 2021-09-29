@@ -20,16 +20,15 @@ Q = @
 E = $(Q) echo
 
 # path for directories
-BIN_DIR = Bin
-SRC_DIR = Src
-HDR_DIR = Include
-OBJ_DIR = Obj
-TST_DIR = Tests
+BIN_DIR  = Bin
+SRC_DIR  = Src
+HDR_DIR  = Include
+OBJ_DIR  = Obj
+TST_DIR  = Tests
+INCL_DIR = $(HDR_DIR) $(TST_DIR)
 
 # Source
-BIN       = $(BIN_DIR)/$(PROJECT)
-BIN_TESTS = $(BIN_DIR)/$(PROJECT)_tests
-
+BIN  = $(BIN_DIR)/$(PROJECT)
 HDR  = $(HDR_DIR)/$(PROJECT).h   $(TST_DIR)/tests.h
 SRC  = $(SRC_DIR)/$(PROJECT).cpp $(TST_DIR)/tests.cpp $(SRC_DIR)/main.cpp 
 OBJ  = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC)))
@@ -39,7 +38,7 @@ LIB  = $(addprefix lib, $(addsuffix .a, $(notdir $(BIN))))
 
 # find a *.cpp *.h files 
 vpath %.cpp $(SRC_DIR) $(TST_DIR)
-vpath %.h   $(HDR_DIR) $(TST_DIR) 
+vpath %.h   $(HDR_DIR) $(TST_DIR)
 
 # compiler settings
 CXX      = g++ -std=c++14
@@ -77,24 +76,20 @@ release: clean $(BIN)
 	$(E) "    LAUNCH(RLS): " $(BIN)
 	$(Q) $(BIN)
 
-tests: $(BIN_TESTS)
-	$(E) "    LAUNCH(TESTS):       " $(BIN_TESTS)
-	$(Q) $(BIN_TESTS)
-
 #
 ## linking
 $(BIN): $(OBJ)
 	$(E) "    LINK:        " $@
-	$(Q) $(CXX) $(WARNINGS) $^ -o $@ 
+	$(Q) $(CXX) $(WARNINGS) $^ -o $@
 
 #
 ## compiling
 $(OBJ_DIR)/%.o: %.cpp
 	$(E) "    C++:         " $@
-	$(Q) ${CXX} -c  ${CXXFLAGS} $(addprefix -I, $(HDR_DIR)) $< -o $@
+	$(Q) ${CXX} -c  ${CXXFLAGS} $(addprefix -I, $(INCL_DIR)) $< -o $@
 
-$(OBJ_DIR)/main.o:             main.cpp $(PROJECT).h tests.h
 $(OBJ_DIR)/$(PROJECT).o: $(PROJECT).cpp $(PROJECT).h 
+$(OBJ_DIR)/main.o:             main.cpp $(PROJECT).h tests.h
 $(OBJ_DIR)/tests.o:           tests.cpp $(PROJECT).h tests.h
 
 #
